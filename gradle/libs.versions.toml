@@ -1,6 +1,8 @@
 [versions]
+activity-ktx = "1.10.1"
 androidx-core = "1.12.0"
 androidx-appcompat = "1.6.1"
+lifecycle-viewmodel-ktx = "2.9.1"
 material = "1.11.0"
 junit = "4.13.2"
 androidx-junit = "1.1.5"
@@ -9,10 +11,14 @@ androidx-work = "2.9.0"
 kotlinx-coroutines = "1.7.3"
 androidx-activity = "1.8.2"
 androidx-constraintlayout = "2.1.4"
+workmanager = "2.8.1"
 
 [libraries]
+androidx-activity-ktx-v1101 = { module = "androidx.activity:activity-ktx", version.ref = "activity-ktx" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidx-appcompat" }
+androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle-viewmodel-ktx" }
+androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle-viewmodel-ktx" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-junit" }
@@ -21,6 +27,7 @@ androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx"
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
 androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidx-activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidx-constraintlayout" }
+androidx-workmanager-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workmanager" }
 
 [plugins]
 android-application = { id = "com.android.application", version = "8.3.0" }

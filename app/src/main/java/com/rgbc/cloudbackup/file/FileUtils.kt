@@ -1,4 +1,4 @@
-package com.rgbc.gbackupspoof
+package com.rgbc.cloudbackup.file
 
 import android.content.Context
 import android.provider.MediaStore

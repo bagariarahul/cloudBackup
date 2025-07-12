@@ -2,6 +2,7 @@ package com.rgbc.cloudbackup
 
 
 
+import FileScannerViewModel
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -17,6 +18,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -26,24 +28,32 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.rgbc.gbackupspoof.BackupWorker
+import com.rgbc.cloudbackup.utils.BackupWorker
 import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
+
+
+    private val viewModel: FileScannerViewModel by viewModels()
     private var permissionRequestCount = 0
     private lateinit var statusText: TextView
 
     // Single permission launcher for all cases
     private val requestPermissionsLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()
-    ) { permissions ->
-        val allGranted = permissions.values.all { it }
-        handlePermissionResult(allGranted)
+        ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+        if(isGranted) {
+        }
+        else{
+
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
+        checkAndRequestPermissions()
 
         statusText = findViewById(R.id.statusText)
         val permissionButton = findViewById<Button>(R.id.permissionButton)
@@ -54,6 +64,19 @@ class MainActivity : AppCompatActivity() {
 
         // Delay permission request to ensure UI is ready
         Handler(Looper.getMainLooper()).postDelayed(::requestStoragePermission, 500)
+    }
+
+    private fun checkAndRequestPermissions() {
+        when{
+            ContextCompat.checkSelfPermission(
+                this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED -> {
+
+            }
+            else -> {
+                requestPermissionsLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+            }
+
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -68,8 +91,8 @@ class MainActivity : AppCompatActivity() {
         statusText.text = "Requesting permission..."
 
         // Get required permissions based on Android version
-        val permissions = getRequiredPermissions()
-        requestPermissionsLauncher.launch(permissions)
+//        val permissions = getRequiredPermissions()
+//        requestPermissionsLauncher.launch(permissions)
     }
 
     private fun hasRequiredPermissions(): Boolean {
@@ -172,4 +195,5 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, "Running test backup NOW", Toast.LENGTH_SHORT).show()
         Log.d("BackupTest", "Immediate backup triggered")
     }
+
 }
