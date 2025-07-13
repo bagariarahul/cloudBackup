@@ -1,4 +1,5 @@
-import android.text.format.Formatter.formatFileSize
+package com.rgbc.cloudbackup.file
+
 import android.view.View
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.rgbc.cloudbackup.R
+import com.rgbc.cloudbackup.db.FileIndex
 import java.text.CharacterIterator
 import java.text.StringCharacterIterator
 
@@ -17,6 +19,7 @@ class FileIndexAdapter : ListAdapter<FileIndex, FileIndexAdapter.FileViewHolder>
         private val nameTextView: TextView = itemView.findViewById(R.id.file_name)
         private val detailsTextView: TextView = itemView.findViewById(R.id.file_details)
         private val statusIcon: ImageView = itemView.findViewById(R.id.backup_status_icon)
+        private val thumbnail: ImageView = itemView.findViewById(R.id.file_thumbnail)
 
         fun bind(file: FileIndex) {
             //val decryptedName= CryptoManager().decryptFileNames(file.fileName)

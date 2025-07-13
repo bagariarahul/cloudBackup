@@ -1,8 +1,10 @@
+package com.rgbc.cloudbackup.db
+
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import java.util.Date
+import okio.Path
 
 @Entity(tableName = "rgb_file_index")
 data class FileIndex(

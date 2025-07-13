@@ -1,3 +1,5 @@
+package com.rgbc.cloudbackup.utils
+
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -5,7 +7,6 @@ import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 import android.util.Base64
-import kotlin.io.encoding.ExperimentalEncodingApi
 
 class CryptoManager {
     private val key = "YourSuperSecretKey1234567890".toByteArray()

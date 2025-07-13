@@ -1,5 +1,7 @@
+package com.rgbc.cloudbackup.file
+
+import com.rgbc.cloudbackup.utils.CryptoManager
 import androidx.lifecycle.AndroidViewModel
-import com.rgbc.cloudbackup.MainApplication
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
@@ -9,13 +11,16 @@ import kotlinx.coroutines.launch
 import java.io.File
 import android.os.Environment
 import android.util.Log
+import com.rgbc.cloudbackup.db.AppDatabase
+import com.rgbc.cloudbackup.db.FileIndex
+import com.rgbc.cloudbackup.utils.ChecksumUtils
 
 
 class FileScannerViewModel(application: Application): AndroidViewModel(application){
     private val TAG="FileScannerViewModel"
     private val db= AppDatabase.getDatabase(application)
     private val fileDao=db.fileIndexDao()
-    private val cryptoManager=CryptoManager()
+    private val cryptoManager= CryptoManager()
 
     val allFiles: LiveData<List<FileIndex>> = fileDao.getAllFiles().asLiveData()
 
@@ -35,7 +40,7 @@ class FileScannerViewModel(application: Application): AndroidViewModel(applicati
             Log.d("${TAG}.scanAndProcessFiles","Starting scan of ${sourceDir.absolutePath}...")
            for(file in sourceDir.listFiles() ?: emptyArray()) {
                 if(file.isFile){
-                    val checksum=ChecksumUtils.createChecksum(file)
+                    val checksum= ChecksumUtils.createChecksum(file)
                     if(checksum.isBlank()) {
                         Log.w("${TAG}.scanAndProcessFiles","Could not generate checksum fro file: ${file.name}")
                         continue

@@ -1,11 +1,13 @@
 package com.rgbc.cloudbackup.worker
 
-import FileIndex
+import com.rgbc.cloudbackup.db.FileIndex
 import android.content.Context
 import android.os.Environment
 import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.rgbc.cloudbackup.db.AppDatabase
+import com.rgbc.cloudbackup.utils.ChecksumUtils
 
 class FileScannerWorker(appContext: Context, workerParams: WorkerParameters) : CoroutineWorker(appContext,workerParams) {
 
@@ -16,7 +18,7 @@ class FileScannerWorker(appContext: Context, workerParams: WorkerParameters) : C
     override suspend fun doWork(): Result {
 
         val appContext=applicationContext
-        val fileDao=AppDatabase.getDatabase(appContext).fileIndexDao()
+        val fileDao= AppDatabase.getDatabase(appContext).fileIndexDao()
 
         Log.d(TAG+TAG_METHOD,"Worker starting: Beginning file scan")
         try{
@@ -29,10 +31,14 @@ class FileScannerWorker(appContext: Context, workerParams: WorkerParameters) : C
             for(file in sourceDir.listFiles() ?: emptyArray()){
                 var checksum = ""
                 if(file.isFile){
-                    checksum=ChecksumUtils.createChecksum(file)
-                    if(checksum.isBlank())
-                        Log.w(TAG+TAG_METHOD,"Checksum failed for file ${file.absolutePath}, skipping")
+                    checksum= ChecksumUtils.createChecksum(file)
+                    if(checksum.isBlank()) {
+                        Log.w(
+                            TAG + TAG_METHOD,
+                            "Checksum failed for file ${file.absolutePath}, skipping"
+                        )
                         continue
+                    }
                 }
                 if(!checksum.isEmpty() && !fileDao.checksumExists(checksum)){
                     Log.d(TAG+TAG_METHOD, "Found new file: ${file.name}. Processing...")

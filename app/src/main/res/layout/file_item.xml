@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/file_name"
             android:textSize="16sp"
-            android:textColor="android:@color/black"
+            android:textColor="@color/black"
             tools:text="EncryptedFileName.txt" />
         <TextView
             android:id="@+id/file_details"

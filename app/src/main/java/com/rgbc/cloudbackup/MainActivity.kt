@@ -2,7 +2,8 @@ package com.rgbc.cloudbackup
 
 
 
-import FileScannerViewModel
+import com.rgbc.cloudbackup.file.FileIndexAdapter
+import com.rgbc.cloudbackup.file.FileScannerViewModel
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -25,16 +26,35 @@ import androidx.core.content.ContextCompat
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.rgbc.cloudbackup.utils.BackupWorker
+import com.rgbc.cloudbackup.worker.FileScannerWorker
 import java.util.concurrent.TimeUnit
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
 
-
+    private val TAG = "MainActivity"
+    private lateinit var recyclerView: RecyclerView
     private val viewModel: FileScannerViewModel by viewModels()
+    private val fileAdapter = FileIndexAdapter()
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()){
+            isGranted: Boolean ->
+            if(isGranted){
+                Log.i(TAG, "Permission Granted")
+            }
+            else{
+                Log.i(TAG, "Permission Denied")
+            }
+        }
+
     private var permissionRequestCount = 0
     private lateinit var statusText: TextView
 
@@ -52,6 +72,31 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
+        recyclerView= findViewById<RecyclerView>(R.id.fileRecyclerView)
+
+//        val layoutManager = LinearLayoutManager(this)
+//        recyclerView.layoutManager = layoutManager
+        recyclerView.adapter = fileAdapter
+
+
+        val fab: FloatingActionButton = findViewById(R.id.fab_start_scan)
+
+        fab.setOnClickListener {
+            Log.d(TAG, "FAB clicked")
+            val scanRequest = OneTimeWorkRequest.from(FileScannerWorker::class.java)
+
+            WorkManager.getInstance(this).enqueue(scanRequest)
+
+        }
+
+        viewModel.allFiles.observe(this){
+            files ->
+            files?.let{
+                Log.d(TAG, "File list updated. Submitting ${it.size} files")
+                fileAdapter.submitList(it)
+            }
+        }
 
         checkAndRequestPermissions()
 

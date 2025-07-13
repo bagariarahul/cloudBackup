@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace = "com.rgbc.cloudbackup"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.rgbc.cloudbackup"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -68,4 +68,11 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.workmanager.ktx)
+    implementation(libs.androidx.recyclerview)
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation(libs.coil.kt)
+    implementation(libs.coil.kt.video)
+
+
+
 }
